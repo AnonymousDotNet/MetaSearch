@@ -1,0 +1,6 @@
+c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\bin\Debug\MetaSearch.exe.config
+c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\obj\Debug\MetaSearch.csprojResolveAssemblyReference.cache
+c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\bin\Debug\MetaSearch.exe
+c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\bin\Debug\MetaSearch.pdb
+c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\obj\Debug\MetaSearch.exe
+c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\obj\Debug\MetaSearch.pdb
