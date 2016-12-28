@@ -19,20 +19,15 @@ namespace MetaSearch
             for (int i = 1; i < 42; i++)
             {
                 ParseUrl(pages, "http://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C5%ED%D6%DD%CA%AF%BB%AF&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn=" + i);
-
-
             }
-            foreach (string url in pages)
-            {
-                VideoData data = new VideoData();
-                Console.WriteLine("开始检测：" + url);
-                string source = Downloader.Download(url);
-                HtmlDocument htmlPlate = new HtmlDocument();
-                List<string> urls = XpathUtil.GetAttributes(htmlPlate.DocumentNode, "//ul[@class='ul02_l']/a", "href");
-
-
-
-            }
+            //foreach (string url in pages)
+            //{
+            //    VideoData data = new VideoData();
+            //    Console.WriteLine("开始检测：" + url);
+            //    string source = Downloader.Download(url);
+            //    HtmlDocument htmlPlate = new HtmlDocument();
+            //    List<string> urls = XpathUtil.GetAttributes(htmlPlate.DocumentNode, "//ul[@class='ul02_l']/a", "href");
+            //}
         }
 
         //public static List<UrlEntity> MatchTextCollection(string text, string parrern, int index)
@@ -52,16 +47,11 @@ namespace MetaSearch
         {
             try
             {
-
                 string url = "";
                 string html = Http.Downloader.Download(home);
-
-
                 HtmlDocument hn = new HtmlDocument();
                 hn.LoadHtml(html);
-
                 List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//span[@class='p_title']/a", "href");
-
                 foreach (var item in liststring)
                 {
                     if (!item.Contains("http://tieba.baidu"))
@@ -72,22 +62,10 @@ namespace MetaSearch
                     {
                         url = item;
                     }
-
-
                     Uri uri = new Uri(item);
-
-
-
-
                     //拿到链接
                 }
-
-
-
                 //List<UrlEntity> ueList = MatchTextCollection(html, "http://www.le.com/ptv/vplay/|\"vid\":\"(.*?)\",", 1);
-
-
-
                 //foreach (UrlEntity ue in ueList)
                 //{
                 //    Uri uri = ue.uri;
@@ -100,28 +78,21 @@ namespace MetaSearch
             {
                 Console.WriteLine(e.ToString());
             }
-
         }
-
         private static List<VideoData> GetNeedData(string url, List<VideoData> vdList)
         {
-
-            string html = Http.Downloader.Download(url);
             VideoData vd = new VideoData();
-            //vd.Content;
-            //vd.Source;
-            //vd.Time;
-            //vd.Title;
-            //vd.Author;
+            string html = Http.Downloader.Download(url);
+            HtmlDocument hn = new HtmlDocument();
+            hn.LoadHtml(html);
             vd.Url = url;
-
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='d_post_content j_d_post_content ']");
+            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='core_title_wrap_bright clearfix']/h3");
+            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//li[@class='d_name']/a");
+            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='post-tail-wrap']/span[4]");
+            vd.Source = "百度贴吧";
             vdList.Add(vd);
-
             return vdList;
-
         }
-
-
-
     }
 }
