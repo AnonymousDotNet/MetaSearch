@@ -25,6 +25,7 @@ namespace MetaSearch
             //Kdnet.Start();
 
             //强国
+            People.Start();
 
             //发展
 

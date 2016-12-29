@@ -12,18 +12,18 @@ namespace MetaSearch.Script
     {
         public static void Start()
         {
-            List<string> pages = new List<string>();
+            List<VideoData> vdList = new List<VideoData>();
             //for (int i = 1; i < 2; i++)
             //{
-            ParseUrl(pages, "http://bbs1.people.com.cn/quickSearch.do?field=title&threadtype=1&content=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96");
+            ParseUrl(vdList, "http://bbs1.people.com.cn/quickSearch.do?field=title&threadtype=1&content=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96");
             //}
         }
-        public static void ParseUrl(List<string> urls, string home)
+        public static void ParseUrl(List<VideoData> vdList, string Url)
         {
             try
             {
                 string url = "";
-                string html = Http.Downloader.Download(home);
+                string html = Http.Downloader.Download(Url);
                 HtmlDocument hn = new HtmlDocument();
                 hn.LoadHtml(html);
                 List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//p[@class='treeTitle']/a", "href");
@@ -37,7 +37,9 @@ namespace MetaSearch.Script
                     {
                         url = item;
                     }
-                    Uri uri = new Uri(item);
+                    Uri uri = new Uri(url);
+
+                    GetNeedData(uri, vdList);
                 }
             }
             catch (Exception e)
@@ -45,18 +47,21 @@ namespace MetaSearch.Script
                 Console.WriteLine(e.ToString());
             }
         }
-        private static List<VideoData> GetNeedData(string url, List<VideoData> vdList)
+        private static List<VideoData> GetNeedData(Uri uri, List<VideoData> vdList)
         {
             VideoData vd = new VideoData();
-            string html = Http.Downloader.Download(url);
+            string html = Http.Downloader.Download(uri.AbsoluteUri);
             HtmlDocument hn = new HtmlDocument();
             hn.LoadHtml(html);
-            vd.Url = url;
-            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='d_post_content j_d_post_content ']");
-            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='core_title_wrap_bright clearfix']/h3");
-            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//li[@class='d_name']/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='post-tail-wrap']/span[4]");
-            vd.Source = "百度贴吧";
+            vd.Url = uri.AbsoluteUri;
+            string contenturl = XpathUtil.GetAttribute(hn.DocumentNode, "//div[@class='article scrollFlag']", "content_path");
+            string content = Http.Downloader.Download(uri.AbsoluteUri, Encoding.GetEncoding("UTF-8"));
+            vd.Content = content;
+            //vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='d_post_content j_d_post_content ']");
+            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='navBar']/h2");
+            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='clearfix']/a");
+            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//span[@class='float_l mT10']");
+            vd.Source = "强国论坛";
             vdList.Add(vd);
             return vdList;
         }
