@@ -28,7 +28,7 @@ namespace MetaSearch
             People.Start();
 
             //发展
-
+            FaZhanForum.Start();
             Console.WriteLine("POST完成！！！");
 
         }
