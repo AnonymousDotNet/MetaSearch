@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MetaSearch.Script;
 
 namespace MetaSearch
 {
@@ -11,14 +12,17 @@ namespace MetaSearch
     {
         static void Main(string[] args)
         {
-            //百度
-            BaiDuTieBa.Start();
+            //百度--OK
+            //BaiDuTieBa.Start();
 
             //天涯
+            //TianYa.Start();
 
             //猫扑
+            //Mop.Start();
 
-            //凯迪
+            //凯迪--OK
+            Kdnet.Start();
 
             //强国
 

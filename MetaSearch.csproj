@@ -54,6 +54,7 @@
     <Compile Include="Script\BaiDuTieBa.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Script\Kdnet.cs" />
     <Compile Include="Script\Mop.cs" />
     <Compile Include="Script\TianYa.cs" />
     <Compile Include="Utility\RegexUtil.cs" />
