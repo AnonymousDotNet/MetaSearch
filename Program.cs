@@ -22,9 +22,10 @@ namespace MetaSearch
             //Mop.Start();
 
             //凯迪--OK
-            Kdnet.Start();
+            //Kdnet.Start();
 
             //强国
+            People.Start();
 
             //发展
 

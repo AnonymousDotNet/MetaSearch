@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace MetaSearch.Script
 {
-    class People
+    class FaZhanForum
     {
         public static void Start()
         {
             List<string> pages = new List<string>();
             //for (int i = 1; i < 2; i++)
             //{
-            ParseUrl(pages, "http://bbs1.people.com.cn/quickSearch.do?field=title&threadtype=1&content=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96");
+            ParseUrl(pages, "http://search.home.news.cn/forumbookSearch.do?sw=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96&srchType=1");
             //}
         }
         public static void ParseUrl(List<string> urls, string home)
@@ -26,17 +26,17 @@ namespace MetaSearch.Script
                 string html = Http.Downloader.Download(home);
                 HtmlDocument hn = new HtmlDocument();
                 hn.LoadHtml(html);
-                List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//p[@class='treeTitle']/a", "href");
+                List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//td[@width='614']/a", "href");
                 foreach (var item in liststring)
                 {
-                    if (!item.Contains("http://bbs1.people.com"))
-                    {
-                        url = "http://bbs1.people.com.cn" + item;
-                    }
-                    else
-                    {
-                        url = item;
-                    }
+                    //if (!item.Contains("http://bbs1.people.com"))
+                    //{
+                    //    url = "http://bbs1.people.com.cn" + item;
+                    //}
+                    //else
+                    //{
+                    //    url = item;
+                    //}
                     Uri uri = new Uri(item);
                 }
             }
@@ -52,14 +52,11 @@ namespace MetaSearch.Script
             HtmlDocument hn = new HtmlDocument();
             hn.LoadHtml(html);
             vd.Url = url;
-            string contenturl = XpathUtil.GetAttribute(hn.DocumentNode, "//div[@class='article scrollFlag']", "content_path");
-            string content = Http.Downloader.Download(url, Encoding.GetEncoding("UTF-8"));
-            vd.Content = content;
-            //vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='d_post_content j_d_post_content ']");
-            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='navBar']/h2");
-            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='clearfix']/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//span[@class='float_l mT10']");
-            vd.Source = "强国论坛";
+            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//td[@class='biaoti']");
+            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//span[@class='zuozhe01']/a");
+            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//td[@class='zuozhe']");
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//td[@width='941']/p");
+            vd.Source = "发展论坛";
             vdList.Add(vd);
             return vdList;
         }
