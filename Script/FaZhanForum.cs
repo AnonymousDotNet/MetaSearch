@@ -13,10 +13,10 @@ namespace MetaSearch.Script
         public static void Start()
         {
             List<VideoData> vdList = new List<VideoData>();
-            //for (int i = 1; i < 2; i++)
-            //{
+
             ParseUrl(vdList, "http://search.home.news.cn/forumbookSearch.do?sw=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96&srchType=1");
-            //}
+
+            DataToExcel.CreateExcel("发展论坛", vdList);
         }
         public static void ParseUrl(List<VideoData> vdList, string Url)
         {
@@ -50,8 +50,11 @@ namespace MetaSearch.Script
             vd.Url = uri.AbsoluteUri;
             vd.Title = XpathUtil.GetText(hn.DocumentNode, "//td[@class='biaoti']");
             vd.Author = XpathUtil.GetText(hn.DocumentNode, "//span[@class='zuozhe01']/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//td[@class='zuozhe']");
-            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//td[@width='941']/p");
+            //vd.Time = XpathUtil.GetText(hn.DocumentNode, "//td[@class='zuozhe']");
+            vd.Time = RegexUtil.MatchText(XpathUtil.GetText(hn.DocumentNode, "//td[@class='zuozhe']"), "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}");
+
+
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//td[@width='941']/p").Replace("&nbsp;", "").Replace("\r","").Replace("\n","");
             vd.Source = "发展论坛";
             vdList.Add(vd);
             return vdList;

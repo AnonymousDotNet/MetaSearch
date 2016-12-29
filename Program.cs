@@ -15,20 +15,20 @@ namespace MetaSearch
             //百度--OK
             //BaiDuTieBa.Start();
 
-            //天涯
+            //天涯--OK
             //TianYa.Start();
 
-            //猫扑
+            //猫扑--OK
             //Mop.Start();
 
             //凯迪--OK
             //Kdnet.Start();
 
-            //强国
-            People.Start();
+            //强国 --OK
+            //People.Start();
 
             //发展
-            FaZhanForum.Start();
+            //FaZhanForum.Start();
             Console.WriteLine("POST完成！！！");
 
         }

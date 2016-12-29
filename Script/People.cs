@@ -13,10 +13,10 @@ namespace MetaSearch.Script
         public static void Start()
         {
             List<VideoData> vdList = new List<VideoData>();
-            //for (int i = 1; i < 2; i++)
-            //{
+
             ParseUrl(vdList, "http://bbs1.people.com.cn/quickSearch.do?field=title&threadtype=1&content=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96");
-            //}
+
+            DataToExcel.CreateExcel("强国论坛", vdList);
         }
         public static void ParseUrl(List<VideoData> vdList, string Url)
         {
@@ -55,12 +55,12 @@ namespace MetaSearch.Script
             hn.LoadHtml(html);
             vd.Url = uri.AbsoluteUri;
             string contenturl = XpathUtil.GetAttribute(hn.DocumentNode, "//div[@class='article scrollFlag']", "content_path");
-            string content = Http.Downloader.Download(uri.AbsoluteUri, Encoding.GetEncoding("UTF-8"));
+            string content = Http.Downloader.Download(contenturl, Encoding.GetEncoding("UTF-8"));
             vd.Content = content;
             //vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='d_post_content j_d_post_content ']");
             vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='navBar']/h2");
-            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='clearfix']/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//span[@class='float_l mT10']");
+            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='clearfix']/a|//div[@class='clearfix']/span[@class='float_l']");
+            vd.Time = RegexUtil.MatchText(XpathUtil.GetText(hn.DocumentNode, "//span[@class='float_l mT10']"), "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}");
             vd.Source = "强国论坛";
             vdList.Add(vd);
             return vdList;

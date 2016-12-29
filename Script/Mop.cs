@@ -49,10 +49,10 @@ namespace MetaSearch.Script
             HtmlDocument hn = new HtmlDocument();
             hn.LoadHtml(html);
             vd.Url = uri.AbsoluteUri;
-            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//h1[@class='c333 subTitle']");
+            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//h1[@class='c333 subTitle']").Replace("&nbsp;", "");
             vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='r-landlordMsg p20 clearfix']/div[2]/a");
             vd.Time = XpathUtil.GetText(hn.DocumentNode, "//span[@class='c999 mr15']");
-            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='article-cont p20 c666']");
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='article-cont p20 c666']").Replace("\r", "").Replace("\n", "");
             vd.Source = "猫扑社区";
             vdList.Add(vd);
             return vdList;

@@ -51,8 +51,8 @@ namespace MetaSearch.Script
 
             vd.Title = XpathUtil.GetText(hn.DocumentNode, "//h1[@class='atl-title']/span/span");
             vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='atl-info']/span/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='atl-info']/span[2]");
-            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='bbs-content clearfix']");
+            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='atl-info']/span[2]").Replace("时间：", "");
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='bbs-content clearfix']").Replace("\r", "").Replace("\n", "").Replace("\t", "");
             vd.Source = "天涯社区";
             vdList.Add(vd);
             return vdList;

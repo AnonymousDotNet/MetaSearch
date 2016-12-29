@@ -14,33 +14,30 @@ namespace MetaSearch.Script
     {
         public static void Start()
         {
-            List<string> pages = new List<string>();
-            //for (int i = 1; i < 2; i++)
-            //{
-                ParseUrl(pages, "http://search.kdnet.net/?q=%C5%ED%D6%DD%CA%AF%BB%AF&sa=%CB%D1%CB%F7&category=title&boardid=0&arrival=2013-12-29&departure=2016-12-29");
-            //}
+            List<VideoData> vdList = new List<VideoData>();
+
+            ParseUrl(vdList, "http://search.kdnet.net/?q=%C5%ED%D6%DD%CA%AF%BB%AF&sa=%CB%D1%CB%F7&category=title&boardid=0&arrival=2013-12-29&departure=2016-12-29");
+
+            DataToExcel.CreateExcel("凯迪社区", vdList);
         }
-        public static void ParseUrl(List<string> urls, string home)
+        public static void ParseUrl(List<VideoData> vdList, string Url)
         {
             try
             {
                 string url = "";
                 //string html = Http.Downloader.Download(home);
-                string html = Download(home);
+                string html = Download(Url);
                 HtmlDocument hn = new HtmlDocument();
                 hn.LoadHtml(html);
                 List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//div[@class='search-result-list']/h2/a", "href");
                 foreach (var item in liststring)
                 {
-                    //if (!item.Contains("http://tieba.baidu"))
-                    //{
-                    //    url = "http://tieba.baidu.com" + item;
-                    //}
-                    //else
-                    //{
-                    //    url = item;
-                    //}
-                    Uri uri = new Uri(item);
+
+                    url = item;
+
+                    Uri uri = new Uri(url);
+
+                    GetNeedData(uri, vdList);
                 }
             }
             catch (Exception e)
@@ -48,17 +45,17 @@ namespace MetaSearch.Script
                 Console.WriteLine(e.ToString());
             }
         }
-        private static List<VideoData> GetNeedData(string url, List<VideoData> vdList)
+        private static List<VideoData> GetNeedData(Uri uri, List<VideoData> vdList)
         {
             VideoData vd = new VideoData();
-            string html = Http.Downloader.Download(url);
+            string html = Http.Downloader.Download(uri.AbsoluteUri);
             HtmlDocument hn = new HtmlDocument();
             hn.LoadHtml(html);
-            vd.Url = url;
+            vd.Url = uri.AbsoluteUri;
             vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='posts-title']");
             vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='posts-posted']/span[1]/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='posts-posted']/text()");
-            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='posts-cont']");
+            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='posts-posted']/text()").Replace(" 于  ", "").Replace(" 发布在 ", "");
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='posts-cont']").Replace("\r", "").Replace("\n", "").Replace("\t", "").Replace("&nbsp;", "");
             vd.Source = "凯迪社区";
             vdList.Add(vd);
             return vdList;
