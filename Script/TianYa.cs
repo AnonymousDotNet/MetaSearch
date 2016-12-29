@@ -12,32 +12,28 @@ namespace MetaSearch.Script
     {
         public static void Start()
         {
-            List<string> pages = new List<string>();
+            List<VideoData> vdList = new List<VideoData>();
             for (int i = 1; i < 76; i++)
             {
-                ParseUrl(pages, "http://search.tianya.cn/bbs?q=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96&pn=" + i);
+                ParseUrl(vdList, "http://search.tianya.cn/bbs?q=%E5%BD%AD%E5%B7%9E%E7%9F%B3%E5%8C%96&pn=" + i);
             }
+            DataToExcel.CreateExcel("天涯论坛", vdList);
         }
-        public static void ParseUrl(List<string> urls, string home)
+        public static void ParseUrl(List<VideoData> vdList, string Url)
         {
             try
             {
                 string url = "";
-                string html = Http.Downloader.Download(home);
+                string html = Http.Downloader.Download(Url);
                 HtmlDocument hn = new HtmlDocument();
                 hn.LoadHtml(html);
                 List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//h3/a", "href");
                 foreach (var item in liststring)
                 {
-                    //if (!item.Contains("http://tieba.baidu"))
-                    //{
-                    //    url = "http://tieba.baidu.com" + item;
-                    //}
-                    //else
-                    //{
-                    //    url = item;
-                    //}
-                    Uri uri = new Uri(item);
+                    url = item;
+                    Uri uri = new Uri(url);
+
+                    GetNeedData(uri, vdList);
                 }
             }
             catch (Exception e)
@@ -45,13 +41,14 @@ namespace MetaSearch.Script
                 Console.WriteLine(e.ToString());
             }
         }
-        private static List<VideoData> GetNeedData(string url, List<VideoData> vdList)
+        private static List<VideoData> GetNeedData(Uri uri, List<VideoData> vdList)
         {
             VideoData vd = new VideoData();
-            string html = Http.Downloader.Download(url);
+            string html = Http.Downloader.Download(uri.AbsoluteUri);
             HtmlDocument hn = new HtmlDocument();
             hn.LoadHtml(html);
-            vd.Url = url;
+            vd.Url = uri.AbsoluteUri;
+
             vd.Title = XpathUtil.GetText(hn.DocumentNode, "//h1[@class='atl-title']/span/span");
             vd.Author = XpathUtil.GetText(hn.DocumentNode, "//div[@class='atl-info']/span/a");
             vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='atl-info']/span[2]");

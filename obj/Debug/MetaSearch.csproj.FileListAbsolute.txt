@@ -4,3 +4,9 @@ c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\bin\
 c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\bin\Debug\MetaSearch.pdb
 c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\obj\Debug\MetaSearch.exe
 c:\users\lulida\documents\visual studio 2015\Projects\MetaSearch\MetaSearch\obj\Debug\MetaSearch.pdb
+D:\C#代码个人项目用的\MetaSearch\bin\Debug\MetaSearch.exe.config
+D:\C#代码个人项目用的\MetaSearch\obj\Debug\MetaSearch.exe
+D:\C#代码个人项目用的\MetaSearch\obj\Debug\MetaSearch.pdb
+D:\C#代码个人项目用的\MetaSearch\bin\Debug\MetaSearch.exe
+D:\C#代码个人项目用的\MetaSearch\bin\Debug\MetaSearch.pdb
+D:\C#代码个人项目用的\MetaSearch\obj\Debug\MetaSearch.csprojResolveAssemblyReference.cache

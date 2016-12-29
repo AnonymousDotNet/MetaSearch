@@ -41,6 +41,34 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Http.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.DDF, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.DDF.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.HPSF, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.HPSF.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.HSSF, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.HSSF.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.POIFS, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.POIFS.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.SS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.SS.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.Util, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.Util.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataToExcel.cs" />
     <Compile Include="Script\BaiDuTieBa.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

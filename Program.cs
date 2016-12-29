@@ -22,14 +22,14 @@ namespace MetaSearch
             //Mop.Start();
 
             //凯迪--OK
-            Kdnet.Start();
+            //Kdnet.Start();
 
             //强国
 
             //发展
 
             Console.WriteLine("POST完成！！！");
-            Console.ReadKey();
+
         }
     }
 }

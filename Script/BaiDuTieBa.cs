@@ -2,8 +2,6 @@
 using Http;
 using Html;
 using System;
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,40 +13,22 @@ namespace MetaSearch
     {
         public static void Start()
         {
-            List<string> pages = new List<string>();
+            List<VideoData> vdList = new List<VideoData>();
             for (int i = 1; i < 42; i++)
             {
-                ParseUrl(pages, "http://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C5%ED%D6%DD%CA%AF%BB%AF&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn=" + i);
+                ParseUrl(vdList, "http://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C5%ED%D6%DD%CA%AF%BB%AF&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn=" + i);
             }
-            //foreach (string url in pages)
-            //{
-            //    VideoData data = new VideoData();
-            //    Console.WriteLine("开始检测：" + url);
-            //    string source = Downloader.Download(url);
-            //    HtmlDocument htmlPlate = new HtmlDocument();
-            //    List<string> urls = XpathUtil.GetAttributes(htmlPlate.DocumentNode, "//ul[@class='ul02_l']/a", "href");
-            //}
+            DataToExcel.CreateExcel("百度贴吧", vdList);
+
         }
 
-        //public static List<UrlEntity> MatchTextCollection(string text, string parrern, int index)
-        //{
-        //    List<UrlEntity> list = new List<UrlEntity>();
-        //    string match1 = parrern.Split('|')[0];
-        //    string match2 = parrern.Split('|')[1];
-        //    MatchCollection mcc = Regex.Matches(text, match2, RegexOptions.IgnoreCase);
-        //    foreach (Match mc in mcc)
-        //    {
-        //        list.Add(new UrlEntity(new Uri(match1 + mc.Groups[index].Value), match1 + mc.Groups[index].Value));
-        //    }
-        //    return list;
-        //}
 
-        public static void ParseUrl(List<string> urls, string home)
+        public static void ParseUrl(List<VideoData> vdList, string Url)
         {
             try
             {
                 string url = "";
-                string html = Http.Downloader.Download(home);
+                string html = Http.Downloader.Download(Url);
                 HtmlDocument hn = new HtmlDocument();
                 hn.LoadHtml(html);
                 List<string> liststring = XpathUtil.GetAttributes(hn.DocumentNode, "//span[@class='p_title']/a", "href");
@@ -62,35 +42,55 @@ namespace MetaSearch
                     {
                         url = item;
                     }
-                    Uri uri = new Uri(item);
-                    //拿到链接
+                    Uri uri = new Uri(url);
+
+                    GetNeedData(uri, vdList);
+
                 }
-                //List<UrlEntity> ueList = MatchTextCollection(html, "http://www.le.com/ptv/vplay/|\"vid\":\"(.*?)\",", 1);
-                //foreach (UrlEntity ue in ueList)
-                //{
-                //    Uri uri = ue.uri;
-                //    //符合规则
-                //    urls.Add(uri.AbsoluteUri);
-                //}
-                //StringUtil.FilterRepeat(urls);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
         }
-        private static List<VideoData> GetNeedData(string url, List<VideoData> vdList)
+        private static List<VideoData> GetNeedData(Uri uri, List<VideoData> vdList)
         {
             VideoData vd = new VideoData();
-            string html = Http.Downloader.Download(url);
+            string html = Downloader.Download(uri.AbsoluteUri);
             HtmlDocument hn = new HtmlDocument();
             hn.LoadHtml(html);
-            vd.Url = url;
-            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='d_post_content j_d_post_content ']");
-            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//div[@class='core_title_wrap_bright clearfix']/h3");
-            vd.Author = XpathUtil.GetText(hn.DocumentNode, "//li[@class='d_name']/a");
-            vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='post-tail-wrap']/span[4]");
+
+
+            vd.Url = uri.AbsoluteUri;
+
+            //vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='l_post j_l_post l_post_bright noborder ']//cc");
+            vd.Content = XpathUtil.GetText(hn.DocumentNode, "//div[@class='l_post j_l_post l_post_bright noborder ']//div[contains(@id,'post_content_')]|//div[@class='l_post l_post_bright j_l_post clearfix  ']//div[contains(@id,'post_content_')]");
+
+            //vd.Title = XpathUtil.GetText(hn.DocumentNode, "//h1[@class='core_title_txt  ']");
+            vd.Title = XpathUtil.GetText(hn.DocumentNode, "//h1|//div[@id='j_core_title_wrap']//h3");
+
+            //vd.Author = XpathUtil.GetText(hn.DocumentNode, "//li[@class='d_name']/a");
+            vd.Author = RegexUtil.RemoveNoise(XpathUtil.GetText(hn.DocumentNode, "//li[@class='d_name']"), "\\s");
+
+            //vd.Time = XpathUtil.GetText(hn.DocumentNode, "//div[@class='core_reply_tail ']//ul[@class='p_tail']");
+            vd.Time = RegexUtil.MatchText(html, "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}");
+
             vd.Source = "百度贴吧";
+
+            if (string.IsNullOrEmpty(vd.Content))
+            {
+                vd.Content = vd.Title;
+            }
+            else
+            {
+                vd.Content = vd.Content.Replace("&#xFFFF;", "");
+            }
+
+            if (string.IsNullOrEmpty(vd.Time))
+            {
+                vd.Time = RegexUtil.MatchText(html, "\"date\":\"(?<time>\\d+-\\d+-\\d+ \\d+:\\d+)[\\s\\S]+?floor\":\\d+,|&quot;date&quot;:&quot;(?<time>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})&quot;,", "time");
+            }
+
             vdList.Add(vd);
             return vdList;
         }
